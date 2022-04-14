@@ -1,4 +1,5 @@
-// Generated from C:/Users/tiago/IdeaProjects/Trabalho Compiladores\par.g4 by ANTLR 4.9.2
+// Generated from C:/Users/tiago/IdeaProjects/Trabalho Compiladores/src/antlr\par.g4 by ANTLR 4.9.2
+package antlr;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
