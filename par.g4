@@ -27,12 +27,11 @@ comp: ID '>' ID
     | ID '!=' ID
 ;
 
-oper: oper '+' oper
-    | oper '-' oper
-    | oper '*' oper
-    | oper '/' oper
-    | oper '%' oper
-    | oper '!=' oper
-    | ID
-    | NUM
+oper: oper '+' oper         #Addition
+    | oper '-' oper         #Subtraction
+    | oper '*' oper         #Multiplication
+    | oper '/' oper         #Division
+    | oper '%' oper         #Modulo
+    | ID                    #ID
+    | NUM                   #Number
 ;
