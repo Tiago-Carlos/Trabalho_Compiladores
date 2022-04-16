@@ -10,6 +10,6 @@ public class AtribuicaoOperacao extends Expression{
     }
     @Override
     public String toString() {
-        return id + " recebe " + operacao.toString();
+        return id + " recebe (" + operacao.toString();
     }
 }

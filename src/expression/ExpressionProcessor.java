@@ -50,10 +50,16 @@ public class ExpressionProcessor {
                  || (e instanceof AtribuicaoBool)){
                 evaluations.add(getAtriResults(e));
             }
+            else if (e instanceof AtribuicaoComparacao) {
+                AtribuicaoComparacao add = (AtribuicaoComparacao) e;
+                boolean result = getCompResults(add.comparacao);
+                valuesBool.put(add.id, result);
+                evaluations.add(e.toString() + ") = " + result);
+            }
             else {
                 String input = e.toString();
                 int result = getEvalResults(e);
-                evaluations.add(input + " = " + result);
+                evaluations.add(input + ") = " + result);
             }
         }
         return evaluations;
@@ -102,6 +108,7 @@ public class ExpressionProcessor {
         else if (e instanceof AtribuicaoOperacao) {
             AtribuicaoOperacao add = (AtribuicaoOperacao) e;
             result = getEvalResults(add.operacao);
+            valuesInt.put(add.id, result);
         }
         return result;
     }
@@ -110,15 +117,54 @@ public class ExpressionProcessor {
         String result = "VAZIO";
         if (e instanceof AtribuicaoInt atr) {
             result = "Int [" + atr.id + "] recebeu o valor " + atr.value;
+            valuesInt.put(atr.id, atr.value);
         }
         else if (e instanceof AtribuicaoFloat atr) {
             result = "Float [" + atr.id + "] recebeu o valor " + atr.value;
+            valuesFloat.put(atr.id, atr.value);
         }
         else if (e instanceof AtribuicaoString atr) {
             result = "String [" + atr.id + "] recebeu o valor "+ atr.value;
+            valuesString.put(atr.id, atr.value);
         }
         else if (e instanceof AtribuicaoBool atr) {
             result = "Bool [" + atr.id + "] recebeu o valor " + atr.value;
+            valuesBool.put(atr.id, atr.value);
+        }
+        return result;
+    }
+
+    private boolean getCompResults(Expression e) {
+        boolean result = false;
+        if (e instanceof Igual temp) {
+            int left = valuesInt.get(temp.left);
+            int right = valuesInt.get(temp.right);
+            result = (left==right);
+        }
+        else if (e instanceof Diferente temp) {
+            int left = valuesInt.get(temp.left);
+            int right = valuesInt.get(temp.right);
+            result = (left!=right);
+        }
+        else if (e instanceof MaiorQue temp) {
+            int left = valuesInt.get(temp.left);
+            int right = valuesInt.get(temp.right);
+            result = (left>right);
+        }
+        else if (e instanceof MenorQue temp) {
+            int left = valuesInt.get(temp.left);
+            int right = valuesInt.get(temp.right);
+            result = (left<right);
+        }
+        else if (e instanceof MaiorIgual temp) {
+            int left = valuesInt.get(temp.left);
+            int right = valuesInt.get(temp.right);
+            result = (left>=right);
+        }
+        else if (e instanceof MenorIgual temp) {
+            int left = valuesInt.get(temp.left);
+            int right = valuesInt.get(temp.right);
+            result = (left<=right);
         }
         return result;
     }

@@ -163,45 +163,62 @@ public class AntlrToExpression extends parsBaseVisitor<Expression>{
         if (!vars.contains(id)) {
             semanticErrors.add("Error: variavel " + id + " nao foi declarada! (" + line + ", " + column + ")");
         }
-        else {
-            vars.add(id);
-        }
         return new AtribuicaoOperacao(id, visit(ctx.getChild(1)));
     }
 
     @Override
     public Expression visitAtribuirComparation(parsParser.AtribuirComparationContext ctx) {
-        return super.visitAtribuirComparation(ctx);
+        Token idToken = ctx.ID().getSymbol();
+        int line = idToken.getLine();
+        int column = idToken.getCharPositionInLine() + 1;
+        String id = ctx.getChild(3).getText();
+        // Mantendo uma lista de variaveis para reportar erros
+        if (!vars.contains(id)) {
+            semanticErrors.add("Error: variavel " + id + " nao foi declarada! (" + line + ", " + column + ")");
+        }
+        return new AtribuicaoComparacao(id, visit(ctx.getChild(1)));
     }
 
     @Override
     public Expression visitMaiorQue(parsParser.MaiorQueContext ctx) {
-        return super.visitMaiorQue(ctx);
+        String left = ctx.getChild(0).toString();
+        String right = ctx.getChild(2).toString();
+        return new MaiorQue(left, right);
     }
 
     @Override
     public Expression visitMenorQue(parsParser.MenorQueContext ctx) {
-        return super.visitMenorQue(ctx);
+        String left = ctx.getChild(0).toString();
+        String right = ctx.getChild(2).toString();
+        return new MenorQue(left, right);
     }
 
     @Override
     public Expression visitMaiorIgual(parsParser.MaiorIgualContext ctx) {
-        return super.visitMaiorIgual(ctx);
+        String left = ctx.getChild(0).toString();
+        String right = ctx.getChild(2).toString();
+        return new MaiorIgual(left, right);
     }
 
     @Override
     public Expression visitMenorIgual(parsParser.MenorIgualContext ctx) {
-        return super.visitMenorIgual(ctx);
+        String left = ctx.getChild(0).toString();
+        String right = ctx.getChild(2).toString();
+        return new MenorIgual(left, right);
     }
 
     @Override
     public Expression visitIgual(parsParser.IgualContext ctx) {
-        return super.visitIgual(ctx);
+        String left = ctx.getChild(0).toString();
+        String right = ctx.getChild(2).toString();
+        return new Igual(left, right);
     }
 
     @Override
     public Expression visitDiferente(parsParser.DiferenteContext ctx) {
-        return super.visitDiferente(ctx);
+        String left = ctx.getChild(0).toString();
+        String right = ctx.getChild(2).toString();
+        return new Diferente(left, right);
     }
 
     @Override
