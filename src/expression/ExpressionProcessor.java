@@ -7,28 +7,55 @@ import java.util.Map;
 
 public class ExpressionProcessor {
     List<Expression> list;
-    public Map<String, Integer> values; // Tabela de símbolos para guardar valores de variáveis
-
+    public Map<String, Integer> valuesInt; // Tabela de símbolos para guardar valores de variáveis
+    public Map<String, Boolean> valuesBool;
+    public Map<String, Float> valuesFloat;
+    public Map<String, String> valuesString;
     public ExpressionProcessor(List<Expression> list) {
-        this.list = list;
-        values = new HashMap<>();
+        this.list = new ArrayList<>(list);
+        while (this.list.remove(null)) {}
+        valuesInt = new HashMap<>();
+        valuesBool = new HashMap<>();
+        valuesFloat = new HashMap<>();
+        valuesString = new HashMap<>();
     }
 
     public List<String> getEvaluationResults() {
         List<String> evaluations = new ArrayList<>();
 
         for(Expression e : list) {
-            if (e instanceof VariableDeclaration) {
-                VariableDeclaration decl = (VariableDeclaration) e;
-                values.put(decl.id, decl.value);
+            if (e instanceof DeclarationInt) {
+                DeclarationInt decl = (DeclarationInt) e;
+                System.out.println(" - Declarado INT " + decl.id + " = " + decl.value);
+                valuesInt.put(decl.id, decl.value);
+            }
+            else if (e instanceof DeclarationBool) {
+                DeclarationBool decl = (DeclarationBool) e;
+                System.out.println(" - Declarado BOOl " + decl.id + " = " + decl.value);
+                valuesBool.put(decl.id, decl.value);
+            }
+            else if (e instanceof DeclarationFloat) {
+                DeclarationFloat decl = (DeclarationFloat) e;
+                System.out.println(" - Declarado FLOAT " + decl.id + " = " + decl.value);
+                valuesFloat.put(decl.id, decl.value);
+            }
+            else if (e instanceof DeclarationString) {
+                DeclarationString decl = (DeclarationString) e;
+                System.out.println(" - Declarado STRING " + decl.id + " = " + decl.value);
+                valuesString.put(decl.id, decl.value);
+            }
+            else if ((e instanceof AtribuicaoInt)
+                 || (e instanceof AtribuicaoFloat)
+                 || (e instanceof AtribuicaoString)
+                 || (e instanceof AtribuicaoBool)){
+                evaluations.add(getAtriResults(e));
             }
             else {
                 String input = e.toString();
                 int result = getEvalResults(e);
-                evaluations.add(input + " is " + result);
+                evaluations.add(input + " = " + result);
             }
         }
-
         return evaluations;
     }
 
@@ -40,7 +67,7 @@ public class ExpressionProcessor {
         }
         else if (e instanceof Variable) {
             Variable var = (Variable) e;
-            result = values.get(var.id);
+            result = valuesInt.get(var.id);
         }
         else if (e instanceof Addition) {
             Addition add = (Addition) e;
@@ -71,6 +98,27 @@ public class ExpressionProcessor {
             int left = getEvalResults(add.left);
             int right = getEvalResults(add.right);
             result = left%right;
+        }
+        else if (e instanceof AtribuicaoOperacao) {
+            AtribuicaoOperacao add = (AtribuicaoOperacao) e;
+            result = getEvalResults(add.operacao);
+        }
+        return result;
+    }
+
+    private String getAtriResults(Expression e) {
+        String result = "VAZIO";
+        if (e instanceof AtribuicaoInt atr) {
+            result = "Int [" + atr.id + "] recebeu o valor " + atr.value;
+        }
+        else if (e instanceof AtribuicaoFloat atr) {
+            result = "Float [" + atr.id + "] recebeu o valor " + atr.value;
+        }
+        else if (e instanceof AtribuicaoString atr) {
+            result = "String [" + atr.id + "] recebeu o valor "+ atr.value;
+        }
+        else if (e instanceof AtribuicaoBool atr) {
+            result = "Bool [" + atr.id + "] recebeu o valor " + atr.value;
         }
         return result;
     }

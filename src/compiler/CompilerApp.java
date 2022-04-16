@@ -1,8 +1,9 @@
 package compiler;
 
-import antlr.ExprLexer;
-import antlr.ExprParser;
+import antlr.parsLexer;
+import antlr.parsParser;
 import expression.AntlrToProgram;
+import expression.Expression;
 import expression.ExpressionProcessor;
 import expression.Program;
 import org.antlr.v4.runtime.CharStream;
@@ -20,12 +21,13 @@ public class CompilerApp {
         else {
             String local = args[0] + " " +args[1];
             String fileName = local;
-            ExprParser parser = getParser(fileName);
+            parsParser parser = getParser(fileName);
 
             ParseTree antlrAST = parser.prog();
 
             // Cria um visitor pra convertes a parse tree em program/expresson object
             AntlrToProgram progVisitor = new AntlrToProgram();
+
             Program prog = progVisitor.visit(antlrAST);
 
             if (progVisitor.semanticErrors.isEmpty()) {
@@ -42,13 +44,13 @@ public class CompilerApp {
         }
     }
 
-    private static ExprParser getParser(String fileName) {
-        ExprParser parser = null;
+    private static parsParser getParser(String fileName) {
+        parsParser parser = null;
         try {
             CharStream input = CharStreams.fromFileName(fileName);
-            ExprLexer lexer = new ExprLexer(input);
+            parsLexer lexer = new parsLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
-            parser = new ExprParser(tokens);
+            parser = new parsParser(tokens);
         }
         catch (IOException e) {
             e.printStackTrace();

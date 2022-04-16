@@ -1,0 +1,10 @@
+:DECLARACAO
+int var1
+float var2
+string var3
+bool var4
+
+:ALGORITMO
+ATRIBUIR "ISSO E STRING" A var3
+ATRIBUIR 2 + 3 A var1
+ATRIBUIR 2 A var1
