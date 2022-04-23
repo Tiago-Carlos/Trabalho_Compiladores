@@ -5,6 +5,6 @@ string var3
 bool var4
 
 :ALGORITMO
-ATRIBUIR "ISSO E STRING" A var3
+ATRIBUIR "ISSO E STRING" A var2
 ATRIBUIR 2 + 3 A var1
 ATRIBUIR 2 A var1

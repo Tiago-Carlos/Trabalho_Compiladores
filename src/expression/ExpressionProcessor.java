@@ -1,5 +1,7 @@
 package expression;
 
+import org.antlr.v4.runtime.Token;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -116,20 +118,44 @@ public class ExpressionProcessor {
     private String getAtriResults(Expression e) {
         String result = "VAZIO";
         if (e instanceof AtribuicaoInt atr) {
-            result = "Int [" + atr.id + "] recebeu o valor " + atr.value;
-            valuesInt.put(atr.id, atr.value);
+            if (valuesInt.containsKey(atr.id)) {
+                int value = valuesInt.remove(atr.id);
+                result = "Int [" + atr.id + "] recebeu o valor " + atr.value;
+                valuesInt.put(atr.id, atr.value);
+            }
+            else {
+                result = "ERRO DE ATRIBUICAO: Int [" + atr.id + "] nao pode receber o valor " + atr.value;
+            }
         }
         else if (e instanceof AtribuicaoFloat atr) {
-            result = "Float [" + atr.id + "] recebeu o valor " + atr.value;
-            valuesFloat.put(atr.id, atr.value);
+            if (valuesFloat.containsKey(atr.id)) {
+                float value = valuesInt.remove(atr.id);
+                result = "Float [" + atr.id + "] recebeu o valor " + atr.value;
+                valuesFloat.put(atr.id, atr.value);
+            }
+            else {
+                result = "ERRO DE ATRIBUICAO: Float [" + atr.id + "] nao pode receber o valor " + atr.value;
+            }
         }
         else if (e instanceof AtribuicaoString atr) {
-            result = "String [" + atr.id + "] recebeu o valor "+ atr.value;
-            valuesString.put(atr.id, atr.value);
+            if (valuesFloat.containsKey(atr.id)) {
+                String value = valuesString.remove(atr.id);
+                result = "String [" + atr.id + "] recebeu o valor " + atr.value;
+                valuesString.put(atr.id, atr.value);
+            }
+            else{
+                result = "ERRO DE ATRIBUICAO: String [" + atr.id + "] nao pode receber o valor " + atr.value;
+            }
         }
         else if (e instanceof AtribuicaoBool atr) {
-            result = "Bool [" + atr.id + "] recebeu o valor " + atr.value;
-            valuesBool.put(atr.id, atr.value);
+            if (valuesFloat.containsKey(atr.id)) {
+                Boolean value = valuesBool.remove(atr.id);
+                result = "Bool [" + atr.id + "] recebeu o valor " + atr.value;
+                valuesBool.put(atr.id, atr.value);
+            }
+            else {
+                result = "ERRO DE ATRIBUICAO: Bool [" + atr.id + "] nao pode receber o valor " + atr.value;
+            }
         }
         return result;
     }

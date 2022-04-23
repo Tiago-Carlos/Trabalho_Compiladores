@@ -15,11 +15,11 @@ import java.io.IOException;
 
 public class CompilerApp {
     public static void main(String[] args) {
-        if (args.length != 2) {
+        if (args.length != 1) {
             System.err.print("Usage: file name\n");
         }
         else {
-            String local = args[0] + " " +args[1];
+            String local = args[0];
             String fileName = local;
             parsParser parser = getParser(fileName);
 

@@ -1,4 +1,4 @@
-// Generated from C:/Users/tiago/IdeaProjects/Trabalho Compiladores\pars.g4 by ANTLR 4.9.2
+// Generated from /home/tiago/IdeaProjects/Trabalho_Compiladores/pars.g4 by ANTLR 4.10.1
 
 package antlr;
 
