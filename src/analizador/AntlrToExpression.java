@@ -32,7 +32,7 @@ public class AntlrToExpression extends parsBaseVisitor<Expression>{
         String id = ctx.getChild(1).getText();
         // Mantendo uma lista de variaveis para reportar erros
         if (vars.contains(id)) {
-            semanticErrors.add("Error: variable " + id + " already declared! (" + line + ", " + column + ")");
+            semanticErrors.add("ERRO: Variavel " + id + " ja foi declarada! (" + line + ", " + column + ")");
         }
         else {
             vars.add(id);
@@ -49,7 +49,7 @@ public class AntlrToExpression extends parsBaseVisitor<Expression>{
         String id = ctx.getChild(1).getText();
         // Mantendo uma lista de variaveis para reportar erros
         if (vars.contains(id)) {
-            semanticErrors.add("Error: variable " + id + " already declared! (" + line + ", " + column + ")");
+            semanticErrors.add("ERRO: Variavel " + id + " ja foi declarada! (" + line + ", " + column + ")");
         }
         else {
             vars.add(id);
@@ -66,7 +66,7 @@ public class AntlrToExpression extends parsBaseVisitor<Expression>{
         String id = ctx.getChild(1).getText();
         // Mantendo uma lista de variaveis para reportar erros
         if (vars.contains(id)) {
-            semanticErrors.add("Error: variable " + id + " already declared! (" + line + ", " + column + ")");
+            semanticErrors.add("ERRO: Variavel " + id + " ja foi declarada! (" + line + ", " + column + ")");
         }
         else {
             vars.add(id);
@@ -83,7 +83,7 @@ public class AntlrToExpression extends parsBaseVisitor<Expression>{
         String id = ctx.getChild(1).getText();
         // Mantendo uma lista de variaveis para reportar erros
         if (vars.contains(id)) {
-            semanticErrors.add("Error: variable " + id + " already declared! (" + line + ", " + column + ")");
+            semanticErrors.add("ERRO: Variavel " + id + " ja foi declarada! (" + line + ", " + column + ")");
         }
         else {
             vars.add(id);
@@ -106,7 +106,7 @@ public class AntlrToExpression extends parsBaseVisitor<Expression>{
             vars.add(id);
         }
         int value = Integer. parseInt(ctx.getChild(1).getText());
-        return new AtribuicaoInt(id, value);
+        return new AtribuicaoInt(id, value, line);
     }
 
     @Override
@@ -123,7 +123,7 @@ public class AntlrToExpression extends parsBaseVisitor<Expression>{
             vars.add(id);
         }
         String value = ctx.getChild(1).getText();
-        return new AtribuicaoString(id, value);
+        return new AtribuicaoString(id, value, line);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class AntlrToExpression extends parsBaseVisitor<Expression>{
             vars.add(id);
         }
         boolean value = Boolean.parseBoolean(ctx.getChild(1).getText());
-        return new AtribuicaoBool(id, value);
+        return new AtribuicaoBool(id, value, line);
     }
 
     @Override
@@ -157,7 +157,7 @@ public class AntlrToExpression extends parsBaseVisitor<Expression>{
             vars.add(id);
         }
         Float value = Float.parseFloat(ctx.getChild(1).getText().replace(",", "."));
-        return new AtribuicaoFloat(id, value);
+        return new AtribuicaoFloat(id, value, line);
     }
 
 @Override
@@ -170,7 +170,7 @@ public class AntlrToExpression extends parsBaseVisitor<Expression>{
         if (!vars.contains(id)) {
             semanticErrors.add("Error: variavel " + id + " nao foi declarada! (" + line + ", " + column + ")");
         }
-        return new AtribuicaoOperacao(id, visit(ctx.getChild(1)));
+        return new AtribuicaoOperacao(id, visit(ctx.getChild(1)), line);
     }
 
     @Override
@@ -183,7 +183,7 @@ public class AntlrToExpression extends parsBaseVisitor<Expression>{
         if (!vars.contains(id)) {
             semanticErrors.add("Error: variavel " + id + " nao foi declarada! (" + line + ", " + column + ")");
         }
-        return new AtribuicaoComparacao(id, visit(ctx.getChild(1)));
+        return new AtribuicaoComparacao(id, visit(ctx.getChild(1)), line);
     }
 
     @Override
@@ -278,7 +278,7 @@ public class AntlrToExpression extends parsBaseVisitor<Expression>{
 
         String id = ctx.getChild(0).getText();
         if (!vars.contains(id)) {
-            semanticErrors.add("Error: variable " + id + " not declared (" + line + ", " + column + ")");
+            semanticErrors.add("Error: variavel " + id + " nao foi declarada! (" + line + ", " + column + ")");
         }
         return new Variable(id);
     }

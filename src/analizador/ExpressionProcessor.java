@@ -32,23 +32,19 @@ public class ExpressionProcessor {
         List<String> evaluations = new ArrayList<>();
 
         for(Expression e : list) {
-            if (e instanceof DeclarationInt) {
-                DeclarationInt decl = (DeclarationInt) e;
+            if (e instanceof DeclarationInt decl) {
                 System.out.println(" - Declarado INT " + decl.id + " = " + decl.value);
                 valuesInt.put(decl.id, decl.value);
             }
-            else if (e instanceof DeclarationBool) {
-                DeclarationBool decl = (DeclarationBool) e;
+            else if (e instanceof DeclarationBool decl) {
                 System.out.println(" - Declarado BOOl " + decl.id + " = " + decl.value);
                 valuesBool.put(decl.id, decl.value);
             }
-            else if (e instanceof DeclarationFloat) {
-                DeclarationFloat decl = (DeclarationFloat) e;
+            else if (e instanceof DeclarationFloat decl) {
                 System.out.println(" - Declarado FLOAT " + decl.id + " = " + decl.value);
                 valuesFloat.put(decl.id, decl.value);
             }
-            else if (e instanceof DeclarationString) {
-                DeclarationString decl = (DeclarationString) e;
+            else if (e instanceof DeclarationString decl) {
                 System.out.println(" - Declarado STRING " + decl.id + " = " + decl.value);
                 valuesString.put(decl.id, decl.value);
             }
@@ -58,10 +54,9 @@ public class ExpressionProcessor {
                  || (e instanceof AtribuicaoBool)){
                 evaluations.add(getAtriResults(e));
             }
-            else if (e instanceof AtribuicaoComparacao) {
-                AtribuicaoComparacao add = (AtribuicaoComparacao) e;
-                boolean result = getCompResults(add.comparacao);
-                valuesBool.put(add.id, result);
+            else if (e instanceof AtribuicaoComparacao add) {
+                boolean result = getCompResults(add.getComparacao());
+                valuesBool.put(add.getId(), result);
                 evaluations.add(e.toString() + ") = " + result);
             }
             else {
@@ -75,48 +70,40 @@ public class ExpressionProcessor {
 
     private int getEvalResults(Expression e) {
         int result = 0;
-        if (e instanceof  Number) {
-            Number num = (Number) e;
+        if (e instanceof Number num) {
             result = num.num;
         }
-        else if (e instanceof Variable) {
-            Variable var = (Variable) e;
+        else if (e instanceof Variable var) {
             result = valuesInt.get(var.id);
         }
-        else if (e instanceof Addition) {
-            Addition add = (Addition) e;
+        else if (e instanceof Addition add) {
             int left = getEvalResults(add.getLeft());
             int right = getEvalResults(add.getRight());
             result = left+right;
         }
-        else if (e instanceof Subtraction) {
-            Subtraction add = (Subtraction) e;
+        else if (e instanceof Subtraction add) {
             int left = getEvalResults(add.getLeft());
             int right = getEvalResults(add.getRight());
             result = left-right;
         }
-        else if (e instanceof Multiplication) {
-            Multiplication add = (Multiplication) e;
+        else if (e instanceof Multiplication add) {
             int left = getEvalResults(add.getLeft());
             int right = getEvalResults(add.getRight());
             result = left*right;
         }
-        else if (e instanceof Division) {
-            Division add = (Division) e;
+        else if (e instanceof Division add) {
             int left = getEvalResults(add.getLeft());
             int right = getEvalResults(add.getRight());
             result = left/right;
         }
-        else if (e instanceof Modulo) {
-            Modulo add = (Modulo) e;
+        else if (e instanceof Modulo add) {
             int left = getEvalResults(add.getLeft());
             int right = getEvalResults(add.getRight());
             result = left%right;
         }
-        else if (e instanceof AtribuicaoOperacao) {
-            AtribuicaoOperacao add = (AtribuicaoOperacao) e;
-            result = getEvalResults(add.operacao);
-            valuesInt.put(add.id, result);
+        else if (e instanceof AtribuicaoOperacao add) {
+            result = getEvalResults(add.getOperacao());
+            valuesInt.put(add.getId(), result);
         }
         return result;
     }
@@ -124,43 +111,47 @@ public class ExpressionProcessor {
     private String getAtriResults(Expression e) {
         String result = "VAZIO";
         if (e instanceof AtribuicaoInt atr) {
-            if (valuesInt.containsKey(atr.id)) {
-                int value = valuesInt.remove(atr.id);
-                result = "Int [" + atr.id + "] recebeu o valor " + atr.value;
-                valuesInt.put(atr.id, atr.value);
+            if (valuesInt.containsKey(atr.getId())) {
+                int value = valuesInt.remove(atr.getId());
+                result = "Int [" + atr.getId() + "] recebeu o valor " + atr.getValue();
+                valuesInt.put(atr.getId(), atr.getValue());
             }
             else {
-                result = "ERRO DE ATRIBUICAO: Int [" + atr.id + "] nao pode receber o valor " + atr.value;
+                result = "(linha " + atr.getLine() + ") - ERRO - " + getTipo(atr.getId()) +
+                        " [" + atr.getId() + "] nao pode receber o valor " + atr.getValue();
             }
         }
         else if (e instanceof AtribuicaoFloat atr) {
-            if (valuesFloat.containsKey(atr.id)) {
-                float value = valuesInt.remove(atr.id);
-                result = "Float [" + atr.id + "] recebeu o valor " + atr.value;
-                valuesFloat.put(atr.id, atr.value);
+            if (valuesFloat.containsKey(atr.getId())) {
+                float value = valuesInt.remove(atr.getId());
+                result = "Float [" + atr.getId() + "] recebeu o valor " + atr.getValue();
+                valuesFloat.put(atr.getId(), atr.getValue());
             }
             else {
-                result = "ERRO DE ATRIBUICAO: Float [" + atr.id + "] nao pode receber o valor " + atr.value;
+                result = "(linha " + atr.getLine() + ") - ERRO - " + getTipo(atr.getId()) +
+                        " [" + atr.getId() + "] nao pode receber o valor " + atr.getValue();
             }
         }
         else if (e instanceof AtribuicaoString atr) {
-            if (valuesFloat.containsKey(atr.id)) {
-                String value = valuesString.remove(atr.id);
-                result = "String [" + atr.id + "] recebeu o valor " + atr.value;
-                valuesString.put(atr.id, atr.value);
+            if (valuesFloat.containsKey(atr.getId())) {
+                String value = valuesString.remove(atr.getId());
+                result = "String [" + atr.getId() + "] recebeu o valor " + atr.getValue();
+                valuesString.put(atr.getId(), atr.getValue());
             }
             else{
-                result = "ERRO DE ATRIBUICAO: String [" + atr.id + "] nao pode receber o valor " + atr.value;
+                result = "(linha " + atr.getLine() + ") - ERRO - " + getTipo(atr.getId()) +
+                        " [" + atr.getId() + "] nao pode receber o valor " + atr.getValue();
             }
         }
         else if (e instanceof AtribuicaoBool atr) {
-            if (valuesFloat.containsKey(atr.id)) {
-                Boolean value = valuesBool.remove(atr.id);
-                result = "Bool [" + atr.id + "] recebeu o valor " + atr.value;
-                valuesBool.put(atr.id, atr.value);
+            if (valuesBool.containsKey(atr.getId())) {
+                Boolean value = valuesBool.remove(atr.getId());
+                result = "Bool [" + atr.getId() + "] recebeu o valor " + atr.isValue();
+                valuesBool.put(atr.getId(), atr.isValue());
             }
             else {
-                result = "ERRO DE ATRIBUICAO: Bool [" + atr.id + "] nao pode receber o valor " + atr.value;
+                result =  "(linha " + atr.getLine() + ") - ERRO - " + getTipo(atr.getId()) + " [" + atr.getId() +
+                        "] nao pode receber o valor " + atr.isValue();
             }
         }
         return result;
@@ -199,5 +190,22 @@ public class ExpressionProcessor {
             result = (left<=right);
         }
         return result;
+    }
+
+    private String getTipo(String id) {
+        String ret = "";
+        if (valuesInt.containsKey(id)) {
+            ret = "int";
+        }
+        else if (valuesFloat.containsKey(id)){
+            ret = "float";
+        }
+        else if (valuesBool.containsKey(id)) {
+            ret = "bool";
+        }
+        else {
+            ret = "string";
+        }
+        return ret;
     }
 }
