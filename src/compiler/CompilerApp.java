@@ -2,10 +2,9 @@ package compiler;
 
 import antlr.parsLexer;
 import antlr.parsParser;
-import expression.AntlrToProgram;
-import expression.Expression;
-import expression.ExpressionProcessor;
-import expression.Program;
+import analizador.AntlrToProgram;
+import analizador.ExpressionProcessor;
+import analizador.Program;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;

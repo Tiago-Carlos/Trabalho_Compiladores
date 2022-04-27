@@ -5,7 +5,7 @@ string var3
 bool var4
 
 :ALGORITMO
-ATRIBUIR 1 A var2
+ATRIBUIR 1*2 A var2
 ATRIBUIR 2,2 A var3
 ATRIBUIR "string" A var4
 ATRIBUIR true A var1
