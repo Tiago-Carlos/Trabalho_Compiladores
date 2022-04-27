@@ -1,11 +1,12 @@
 :DECLARACAO
-int var1
-float var2
-string var3
-bool var4
+    int var1
+    float var2
+    string var3
+    bool var4
 
 :ALGORITMO
-ATRIBUIR false A var2
-ATRIBUIR 2,2 A var3
-ATRIBUIR "string" A var4
-ATRIBUIR true A var1
+    ATRIBUIR 2 A var1
+    ATRIBUIR  1,5 A var2
+    ATRIBUIR var1+var2 A var1
+    ATRIBUIR "isso é uma string" A var3
+    ATRIBUIR var1 > var2 A var4

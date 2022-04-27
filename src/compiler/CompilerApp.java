@@ -22,6 +22,7 @@ public class CompilerApp {
             String fileName = local;
             parsParser parser = getParser(fileName);
 
+            // Obter arvore
             ParseTree antlrAST = parser.prog();
 
             // Cria um visitor pra convertes a parse tree em program/expresson object
@@ -43,6 +44,7 @@ public class CompilerApp {
         }
     }
 
+    // Método que executa o lexer e o parser sobre o arquivo de entrada
     private static parsParser getParser(String fileName) {
         parsParser parser = null;
         try {

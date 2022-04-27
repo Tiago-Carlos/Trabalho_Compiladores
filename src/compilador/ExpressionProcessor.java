@@ -56,54 +56,66 @@ public class ExpressionProcessor {
             }
             else if (e instanceof AtribuicaoComparacao add) {
                 boolean result = getCompResults(add.getComparacao());
+                valuesBool.remove(add.getId());
                 valuesBool.put(add.getId(), result);
                 evaluations.add(e.toString() + ") = " + result);
             }
             else {
                 String input = e.toString();
-                int result = getEvalResults(e);
+                float result = getEvalResults(e);
                 evaluations.add(input + ") = " + result);
             }
         }
         return evaluations;
     }
 
-    private int getEvalResults(Expression e) {
-        int result = 0;
+    private float getEvalResults(Expression e) {
+        float result = 0;
         if (e instanceof Number num) {
             result = num.num;
         }
         else if (e instanceof Variable var) {
-            result = valuesInt.get(var.id);
+            if (valuesInt.containsKey(var.id)) {
+                result = valuesInt.get(var.id);
+            }
+            else {
+                result = 0;
+            }
         }
         else if (e instanceof Addition add) {
-            int left = getEvalResults(add.getLeft());
-            int right = getEvalResults(add.getRight());
+            float left = getEvalResults(add.getLeft());
+            float right = getEvalResults(add.getRight());
             result = left+right;
         }
         else if (e instanceof Subtraction add) {
-            int left = getEvalResults(add.getLeft());
-            int right = getEvalResults(add.getRight());
+            float left = getEvalResults(add.getLeft());
+            float right = getEvalResults(add.getRight());
             result = left-right;
         }
         else if (e instanceof Multiplication add) {
-            int left = getEvalResults(add.getLeft());
-            int right = getEvalResults(add.getRight());
+            float left = getEvalResults(add.getLeft());
+            float right = getEvalResults(add.getRight());
             result = left*right;
         }
         else if (e instanceof Division add) {
-            int left = getEvalResults(add.getLeft());
-            int right = getEvalResults(add.getRight());
+            float left = getEvalResults(add.getLeft());
+            float right = getEvalResults(add.getRight());
             result = left/right;
         }
         else if (e instanceof Modulo add) {
-            int left = getEvalResults(add.getLeft());
-            int right = getEvalResults(add.getRight());
+            float left = getEvalResults(add.getLeft());
+            float right = getEvalResults(add.getRight());
             result = left%right;
         }
         else if (e instanceof AtribuicaoOperacao add) {
             result = getEvalResults(add.getOperacao());
-            valuesInt.put(add.getId(), result);
+            if (valuesInt.containsKey(add.getId())) {
+                valuesInt.put(add.getId(), Math.round(result));
+            }
+            else {
+                valuesFloat.remove(add.getId());
+                valuesFloat.put(add.getId(), result);
+            }
         }
         return result;
     }
@@ -112,7 +124,7 @@ public class ExpressionProcessor {
         String result = "VAZIO";
         if (e instanceof AtribuicaoInt atr) {
             if (valuesInt.containsKey(atr.getId())) {
-                int value = valuesInt.remove(atr.getId());
+                valuesInt.remove(atr.getId());
                 result = "Int [" + atr.getId() + "] recebeu o valor " + atr.getValue();
                 valuesInt.put(atr.getId(), atr.getValue());
             }
@@ -123,7 +135,7 @@ public class ExpressionProcessor {
         }
         else if (e instanceof AtribuicaoFloat atr) {
             if (valuesFloat.containsKey(atr.getId())) {
-                float value = valuesInt.remove(atr.getId());
+                valuesFloat.remove(atr.getId());
                 result = "Float [" + atr.getId() + "] recebeu o valor " + atr.getValue();
                 valuesFloat.put(atr.getId(), atr.getValue());
             }
@@ -133,8 +145,8 @@ public class ExpressionProcessor {
             }
         }
         else if (e instanceof AtribuicaoString atr) {
-            if (valuesFloat.containsKey(atr.getId())) {
-                String value = valuesString.remove(atr.getId());
+            if (valuesString.containsKey(atr.getId())) {
+                valuesString.remove(atr.getId());
                 result = "String [" + atr.getId() + "] recebeu o valor " + atr.getValue();
                 valuesString.put(atr.getId(), atr.getValue());
             }
@@ -145,7 +157,7 @@ public class ExpressionProcessor {
         }
         else if (e instanceof AtribuicaoBool atr) {
             if (valuesBool.containsKey(atr.getId())) {
-                Boolean value = valuesBool.remove(atr.getId());
+                valuesBool.remove(atr.getId());
                 result = "Bool [" + atr.getId() + "] recebeu o valor " + atr.isValue();
                 valuesBool.put(atr.getId(), atr.isValue());
             }
@@ -160,33 +172,105 @@ public class ExpressionProcessor {
     private boolean getCompResults(Expression e) {
         boolean result = false;
         if (e instanceof Igual temp) {
-            int left = valuesInt.get(temp.getLeft());
-            int right = valuesInt.get(temp.getRight());
+            float left;
+            float right;
+            if (valuesInt.containsKey(temp.getLeft())) {
+                left = valuesInt.get(temp.getLeft());
+            }
+            else {
+                left = valuesFloat.get(temp.getLeft());
+            }
+            if (valuesInt.containsKey(temp.getRight())) {
+                right = valuesInt.get(temp.getRight());
+            }
+            else {
+                right = valuesFloat.get(temp.getRight());
+            }
             result = (left==right);
         }
         else if (e instanceof Diferente temp) {
-            int left = valuesInt.get(temp.getLeft());
-            int right = valuesInt.get(temp.getRight());
+            float left;
+            float right;
+            if (valuesInt.containsKey(temp.getLeft())) {
+                left = valuesInt.get(temp.getLeft());
+            }
+            else {
+                left = valuesFloat.get(temp.getLeft());
+            }
+            if (valuesInt.containsKey(temp.getRight())) {
+                right = valuesInt.get(temp.getRight());
+            }
+            else {
+                right = valuesFloat.get(temp.getRight());
+            }
             result = (left!=right);
         }
         else if (e instanceof MaiorQue temp) {
-            int left = valuesInt.get(temp.getLeft());
-            int right = valuesInt.get(temp.getRight());
+            float left;
+            float right;
+            if (valuesInt.containsKey(temp.getLeft())) {
+                left = valuesInt.get(temp.getLeft());
+            }
+            else {
+                left = valuesFloat.get(temp.getLeft());
+            }
+            if (valuesInt.containsKey(temp.getRight())) {
+                right = valuesInt.get(temp.getRight());
+            }
+            else {
+                right = valuesFloat.get(temp.getRight());
+            }
             result = (left>right);
         }
         else if (e instanceof MenorQue temp) {
-            int left = valuesInt.get(temp.getLeft());
-            int right = valuesInt.get(temp.getRight());
+            float left;
+            float right;
+            if (valuesInt.containsKey(temp.getLeft())) {
+                left = valuesInt.get(temp.getLeft());
+            }
+            else {
+                left = valuesFloat.get(temp.getLeft());
+            }
+            if (valuesInt.containsKey(temp.getRight())) {
+                right = valuesInt.get(temp.getRight());
+            }
+            else {
+                right = valuesFloat.get(temp.getRight());
+            }
             result = (left<right);
         }
         else if (e instanceof MaiorIgual temp) {
-            int left = valuesInt.get(temp.getLeft());
-            int right = valuesInt.get(temp.getRight());
+            float left;
+            float right;
+            if (valuesInt.containsKey(temp.getLeft())) {
+                left = valuesInt.get(temp.getLeft());
+            }
+            else {
+                left = valuesFloat.get(temp.getLeft());
+            }
+            if (valuesInt.containsKey(temp.getRight())) {
+                right = valuesInt.get(temp.getRight());
+            }
+            else {
+                right = valuesFloat.get(temp.getRight());
+            }
             result = (left>=right);
         }
         else if (e instanceof MenorIgual temp) {
-            int left = valuesInt.get(temp.getLeft());
-            int right = valuesInt.get(temp.getRight());
+            float left;
+            float right;
+            if (valuesInt.containsKey(temp.getLeft())) {
+                left = valuesInt.get(temp.getLeft());
+            }
+            else {
+                left = valuesFloat.get(temp.getLeft());
+            }
+            if (valuesInt.containsKey(temp.getRight())) {
+                right = valuesInt.get(temp.getRight());
+            }
+            else {
+                right = valuesFloat.get(temp.getRight());
+            }
             result = (left<=right);
         }
         return result;
