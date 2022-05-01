@@ -78,6 +78,9 @@ public class ExpressionProcessor {
             if (valuesInt.containsKey(var.id)) {
                 result = valuesInt.get(var.id);
             }
+            else if (valuesFloat.containsKey(var.id)){
+                result = valuesFloat.get(var.id);
+            }
             else {
                 result = 0;
             }

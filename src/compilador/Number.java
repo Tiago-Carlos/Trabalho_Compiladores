@@ -1,7 +1,7 @@
 package compilador;
 
 public class Number extends Expression{
-    int num;
+    float num;
 
     public Number(int num) {
         this.num = num;
@@ -9,6 +9,6 @@ public class Number extends Expression{
 
     @Override
     public String toString() {
-        return new Integer(num).toString();
+        return Float.toString(num);
     }
 }
