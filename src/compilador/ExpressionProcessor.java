@@ -60,8 +60,8 @@ public class ExpressionProcessor {
                 if (valuesBool.containsKey(add.getId())) {
                     try {
                         boolean result = getCompResults((Comparacao) add.getComparacao());
-                        valuesBool.remove(add.getId());
-                        valuesBool.put(add.getId(), result);
+                        //valuesBool.remove(add.getId());
+                        //valuesBool.put(add.getId(), result);
                         evaluations.add("(bool)    " + e);
                     }
                     catch (Exception err) {
@@ -78,8 +78,8 @@ public class ExpressionProcessor {
                     try  {
                         float result = getEvalResults(add.getOperacao());
                         evaluations.add("(integer) " + add);
-                        valuesInt.remove(add.getId());
-                        valuesInt.put(add.getId(), Math.round(result));
+                        //valuesInt.remove(add.getId());
+                        //valuesInt.put(add.getId(), Math.round(result));
                     }
                     catch (Exception err) {
                         evaluations.add(err.getMessage());
@@ -89,8 +89,8 @@ public class ExpressionProcessor {
                     try  {
                         float result = getEvalResults(add.getOperacao());
                         evaluations.add("(float)   " + add);
-                        valuesFloat.remove(add.getId());
-                        valuesFloat.put(add.getId(), result);
+                        //valuesFloat.remove(add.getId());
+                        //valuesFloat.put(add.getId(), result);
                     }
                     catch (Exception err) {
                         evaluations.add(err.getMessage());
@@ -154,9 +154,9 @@ public class ExpressionProcessor {
         String result = "VAZIO";
         if (e instanceof AtribuicaoInt atr) {
             if (valuesInt.containsKey(atr.getId())) {
-                valuesInt.remove(atr.getId());
+                //valuesInt.remove(atr.getId());
                 result = "(integer) [" + atr.getId() + "] recebeu o valor " + atr.getValue();
-                valuesInt.put(atr.getId(), atr.getValue());
+                //valuesInt.put(atr.getId(), atr.getValue());
             }
             else {
                 result = (char)27 + "[31m" +"(linha " + atr.getLine() + ") - ERRO - " + getTipo(atr.getId()) +
@@ -165,10 +165,9 @@ public class ExpressionProcessor {
         }
         else if (e instanceof AtribuicaoFloat atr) {
             if (valuesFloat.containsKey(atr.getId())) {
-                valuesFloat.remove(atr.getId());
-                valuesFloat.remove(atr.getId());
+                //valuesFloat.remove(atr.getId());
                 result = "(float)   [" + atr.getId() + "] recebeu o valor " + atr.getValue();
-                valuesFloat.put(atr.getId(), atr.getValue());
+                //valuesFloat.put(atr.getId(), atr.getValue());
             }
             else {
                 result = (char)27 + "[31m" + "(linha " + atr.getLine() + ") - ERRO - " + getTipo(atr.getId()) +
@@ -177,9 +176,9 @@ public class ExpressionProcessor {
         }
         else if (e instanceof AtribuicaoString atr) {
             if (valuesString.containsKey(atr.getId())) {
-                valuesString.remove(atr.getId());
+                //valuesString.remove(atr.getId());
                 result = "(string)  [" + atr.getId() + "] recebeu o valor " + atr.getValue();
-                valuesString.put(atr.getId(), atr.getValue());
+                //valuesString.put(atr.getId(), atr.getValue());
             }
             else{
                 result = (char)27 + "[31m" + "(linha " + atr.getLine() + ") - ERRO - " + getTipo(atr.getId()) +
@@ -188,9 +187,9 @@ public class ExpressionProcessor {
         }
         else if (e instanceof AtribuicaoBool atr) {
             if (valuesBool.containsKey(atr.getId())) {
-                valuesBool.remove(atr.getId());
+                //valuesBool.remove(atr.getId());
                 result = "(bool)    [" + atr.getId() + "] recebeu o valor " + atr.isValue();
-                valuesBool.put(atr.getId(), atr.isValue());
+                //valuesBool.put(atr.getId(), atr.isValue());
             }
             else {
                 result = (char)27 + "[31m" + "(linha " + atr.getLine() + ") - ERRO - " + getTipo(atr.getId()) + " [" + atr.getId() +

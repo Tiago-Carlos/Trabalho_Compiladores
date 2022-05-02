@@ -13,7 +13,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import java.io.IOException;
 
 public class CompilerApp {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         if (args.length != 1) {
             System.err.print("Usage: file name\n");
         }
@@ -25,11 +25,13 @@ public class CompilerApp {
             // Obter arvore
             ParseTree antlrAST = parser.prog();
 
-            // Cria um visitor pra convertes a parse tree em program/expresson object
+            // Cria um visitor que converte a parse tree em program/expresson object
             AntlrToProgram progVisitor = new AntlrToProgram();
 
+            // Passa pela árvore gerada, buscando por erros sintáticos
             Program prog = progVisitor.visit(antlrAST);
 
+            // Se não forem encontrados erros semânticos, passa pros erros semânticos
             if (progVisitor.semanticErrors.isEmpty()) {
                 ExpressionProcessor ep = new ExpressionProcessor(prog.expressions);
                 for(String evaluation:ep.getEvaluationResults()) {

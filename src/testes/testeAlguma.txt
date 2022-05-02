@@ -1,5 +1,5 @@
 :DECLARACAO
-    int var1
+    in var1
     float var2
     string var3
     bool var4
