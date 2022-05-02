@@ -62,7 +62,7 @@ public class ExpressionProcessor {
                         boolean result = getCompResults((Comparacao) add.getComparacao());
                         //valuesBool.remove(add.getId());
                         //valuesBool.put(add.getId(), result);
-                        evaluations.add("(bool)    " + e);
+                        evaluations.add(e.toString());
                     }
                     catch (Exception err) {
                         evaluations.add(err.getMessage());
@@ -77,9 +77,7 @@ public class ExpressionProcessor {
                 if (valuesInt.containsKey(add.getId())) {
                     try  {
                         float result = getEvalResults(add.getOperacao());
-                        evaluations.add("(integer) " + add);
-                        //valuesInt.remove(add.getId());
-                        //valuesInt.put(add.getId(), Math.round(result));
+                        evaluations.add(add.toString());
                     }
                     catch (Exception err) {
                         evaluations.add(err.getMessage());
@@ -88,7 +86,7 @@ public class ExpressionProcessor {
                 else if (valuesFloat.containsKey(add.getId())) {
                     try  {
                         float result = getEvalResults(add.getOperacao());
-                        evaluations.add("(float)   " + add);
+                        evaluations.add(add.toString());
                         //valuesFloat.remove(add.getId());
                         //valuesFloat.put(add.getId(), result);
                     }
@@ -155,7 +153,7 @@ public class ExpressionProcessor {
         if (e instanceof AtribuicaoInt atr) {
             if (valuesInt.containsKey(atr.getId())) {
                 //valuesInt.remove(atr.getId());
-                result = "(integer) [" + atr.getId() + "] recebeu o valor " + atr.getValue();
+                result = "[" + atr.getId() + "] recebeu o valor " + atr.getValue();
                 //valuesInt.put(atr.getId(), atr.getValue());
             }
             else {
@@ -166,7 +164,7 @@ public class ExpressionProcessor {
         else if (e instanceof AtribuicaoFloat atr) {
             if (valuesFloat.containsKey(atr.getId())) {
                 //valuesFloat.remove(atr.getId());
-                result = "(float)   [" + atr.getId() + "] recebeu o valor " + atr.getValue();
+                result = "[" + atr.getId() + "] recebeu o valor " + atr.getValue();
                 //valuesFloat.put(atr.getId(), atr.getValue());
             }
             else {
@@ -177,7 +175,7 @@ public class ExpressionProcessor {
         else if (e instanceof AtribuicaoString atr) {
             if (valuesString.containsKey(atr.getId())) {
                 //valuesString.remove(atr.getId());
-                result = "(string)  [" + atr.getId() + "] recebeu o valor " + atr.getValue();
+                result = "[" + atr.getId() + "] recebeu o valor " + atr.getValue();
                 //valuesString.put(atr.getId(), atr.getValue());
             }
             else{
@@ -188,7 +186,7 @@ public class ExpressionProcessor {
         else if (e instanceof AtribuicaoBool atr) {
             if (valuesBool.containsKey(atr.getId())) {
                 //valuesBool.remove(atr.getId());
-                result = "(bool)    [" + atr.getId() + "] recebeu o valor " + atr.isValue();
+                result = "[" + atr.getId() + "] recebeu o valor " + atr.isValue();
                 //valuesBool.put(atr.getId(), atr.isValue());
             }
             else {

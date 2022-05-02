@@ -1,14 +1,13 @@
 :DECLARACAO
-    in var1
+    int var1
     float var2
     string var3
     bool var4
 
 :ALGORITMO
-    ATRIBUIR 2 A var1
-    ATRIBUIR 2+var4 A var2
+    ATRIBUIR "(ツ)_/¯" A var1
     ATRIBUIR  1,5 A var2
-    ATRIBUIR var1+var2 A var1
-    ATRIBUIR var1 + "isso é uma string" A var3
-    ATRIBUIR "isso que é string" A var3
-    ATRIBUIR var1>var3 A var4
+    ATRIBUIR var1*false A var1
+    ATRIBUIR "isso é uma string" A var3
+    ATRIBUIR var1>var2 A var4
+
