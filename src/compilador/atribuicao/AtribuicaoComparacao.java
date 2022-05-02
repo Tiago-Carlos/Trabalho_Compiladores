@@ -11,7 +11,7 @@ public class AtribuicaoComparacao extends Atribuicao {
     }
     @Override
     public String toString() {
-        return "["+getId()+"]" + " recebe " + comparacao.toString();
+        return "["+getId()+"]" + " recebeu " + comparacao.toString();
     }
 
     public Expression getComparacao() {
