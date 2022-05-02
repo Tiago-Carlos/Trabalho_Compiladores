@@ -6,7 +6,8 @@ public class Subtraction extends Expression {
     Expression left;
     Expression right;
 
-    public Subtraction(Expression left, Expression right) {
+    public Subtraction(Expression left, Expression right, int line) {
+        super(line);
         this.left = left;
         this.right = right;
     }

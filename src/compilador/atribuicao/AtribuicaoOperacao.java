@@ -11,7 +11,10 @@ public class AtribuicaoOperacao extends Atribuicao {
     }
     @Override
     public String toString() {
-        return getId() + " recebe (" + operacao.toString();
+        if (operacao != null) {
+            return "[" + getId() + "]" + " recebe " + operacao.toString();
+        }
+        return (char)27 + "[31m"+"(linha " + getLine() + ") - ERRO - Operação ilegal" + (char)27 + "[00;00m";
     }
 
     public Expression getOperacao() {

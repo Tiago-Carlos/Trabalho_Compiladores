@@ -13,7 +13,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import java.io.IOException;
 
 public class CompilerApp {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         if (args.length != 1) {
             System.err.print("Usage: file name\n");
         }

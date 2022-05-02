@@ -2,34 +2,14 @@ package compilador.comparacao;
 
 import compilador.Expression;
 
-public class Diferente extends Expression {
-    String left;
+public class Diferente extends Comparacao {
 
-    public String getLeft() {
-        return left;
-    }
-
-    public void setLeft(String left) {
-        this.left = left;
-    }
-
-    public String getRight() {
-        return right;
-    }
-
-    public void setRight(String right) {
-        this.right = right;
-    }
-
-    String right;
-
-    public Diferente(String left, String right) {
-        this.left = left;
-        this.right = right;
+    public Diferente(String left, String right, int line) {
+        super(left, right, line);
     }
 
     @Override
     public String toString() {
-        return left + " != " + right;
+        return getLeft() + " != " + getRight();
     }
 }

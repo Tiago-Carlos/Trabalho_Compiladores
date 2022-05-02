@@ -22,7 +22,8 @@ public class Addition extends Expression {
         this.right = right;
     }
 
-    public Addition(Expression left, Expression right) {
+    public Addition(Expression left, Expression right, int line) {
+        super(line);
         this.left = left;
         this.right = right;
     }

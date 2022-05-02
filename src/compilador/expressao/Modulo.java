@@ -6,7 +6,8 @@ public class Modulo extends Expression {
     Expression left;
     Expression right;
 
-    public Modulo(Expression left, Expression right) {
+    public Modulo(Expression left, Expression right, int line) {
+        super(line);
         this.left = left;
         this.right = right;
     }

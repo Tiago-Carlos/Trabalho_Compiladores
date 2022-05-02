@@ -6,7 +6,8 @@ public class Multiplication extends Expression {
     Expression left;
     Expression right;
 
-    public Multiplication(Expression left, Expression right) {
+    public Multiplication(Expression left, Expression right, int line) {
+        super(line);
         this.left = left;
         this.right = right;
     }

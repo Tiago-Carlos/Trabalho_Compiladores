@@ -21,7 +21,7 @@ public class ExpressionProcessor {
     public Map<String, String> valuesString;
     public ExpressionProcessor(List<Expression> list) {
         this.list = new ArrayList<>(list);
-        while (this.list.remove(null)) {}
+        //while (this.list.remove(null)) {}
         valuesInt = new HashMap<>();
         valuesBool = new HashMap<>();
         valuesFloat = new HashMap<>();
@@ -30,22 +30,24 @@ public class ExpressionProcessor {
 
     public List<String> getEvaluationResults() {
         List<String> evaluations = new ArrayList<>();
-
         for(Expression e : list) {
-            if (e instanceof DeclarationInt decl) {
-                System.out.println(" - Declarado INT " + decl.id + " = " + decl.value);
+            if (e == null) {
+                // Aqui só vai entrar linhas com erro de etapas anteriores, e as linhas :DECLARACAO e :ATRIBUICAO
+            }
+            else if (e instanceof DeclarationInt decl) {
+                System.out.println("Declarado INT " + decl.id);
                 valuesInt.put(decl.id, decl.value);
             }
             else if (e instanceof DeclarationBool decl) {
-                System.out.println(" - Declarado BOOl " + decl.id + " = " + decl.value);
+                System.out.println("Declarado BOOL " + decl.id);
                 valuesBool.put(decl.id, decl.value);
             }
             else if (e instanceof DeclarationFloat decl) {
-                System.out.println(" - Declarado FLOAT " + decl.id + " = " + decl.value);
+                System.out.println("Declarado FLOAT " + decl.id);
                 valuesFloat.put(decl.id, decl.value);
             }
             else if (e instanceof DeclarationString decl) {
-                System.out.println(" - Declarado STRING " + decl.id + " = " + decl.value);
+                System.out.println("Declarado STRING " + decl.id);
                 valuesString.put(decl.id, decl.value);
             }
             else if ((e instanceof AtribuicaoInt)
@@ -55,21 +57,55 @@ public class ExpressionProcessor {
                 evaluations.add(getAtriResults(e));
             }
             else if (e instanceof AtribuicaoComparacao add) {
-                boolean result = getCompResults(add.getComparacao());
-                valuesBool.remove(add.getId());
-                valuesBool.put(add.getId(), result);
-                evaluations.add(e.toString() + ") = " + result);
+                if (valuesBool.containsKey(add.getId())) {
+                    try {
+                        boolean result = getCompResults((Comparacao) add.getComparacao());
+                        valuesBool.remove(add.getId());
+                        valuesBool.put(add.getId(), result);
+                        evaluations.add("(bool)    " + e);
+                    }
+                    catch (Exception err) {
+                        evaluations.add(err.getMessage());
+                    }
+                }
+                else {
+                    evaluations.add((char)27 + "[31m"+"(linha " + add.getLine() + ") - ERRO - Operação ilegal - " + add.getId()
+                            + "é do tipo"  + getTipo(add.getId())  + (char)27 + "[00;00m");
+                }
             }
-            else {
-                String input = e.toString();
-                float result = getEvalResults(e);
-                evaluations.add(input + ") = " + result);
+            else if (e instanceof AtribuicaoOperacao add) {
+                if (valuesInt.containsKey(add.getId())) {
+                    try  {
+                        float result = getEvalResults(add.getOperacao());
+                        evaluations.add("(integer) " + add);
+                        valuesInt.remove(add.getId());
+                        valuesInt.put(add.getId(), Math.round(result));
+                    }
+                    catch (Exception err) {
+                        evaluations.add(err.getMessage());
+                    }
+                }
+                else if (valuesFloat.containsKey(add.getId())) {
+                    try  {
+                        float result = getEvalResults(add.getOperacao());
+                        evaluations.add("(float)   " + add);
+                        valuesFloat.remove(add.getId());
+                        valuesFloat.put(add.getId(), result);
+                    }
+                    catch (Exception err) {
+                        evaluations.add(err.getMessage());
+                    }
+                }
+                else {
+                    evaluations.add((char)27 + "[31m"+"(linha " + add.getLine() + ") - ERRO - Operação ilegal - " + add.getId()
+                            + " é do tipo "  + getTipo(add.getId()) +  (char)27 + "[00;00m");
+                }
             }
         }
         return evaluations;
     }
 
-    private float getEvalResults(Expression e) {
+    private float getEvalResults(Expression e) throws Exception {
         float result = 0;
         if (e instanceof Number num) {
             result = num.num;
@@ -82,7 +118,8 @@ public class ExpressionProcessor {
                 result = valuesFloat.get(var.id);
             }
             else {
-                result = 0;
+                throw new Exception((char)27 + "[31m"+"(linha " + var.getLine() + ") - ERRO - Operação ilegal - " + var.getId()
+                        + " é do tipo " + getTipo(var.getId())  + (char)27 + "[00;00m");
             }
         }
         else if (e instanceof Addition add) {
@@ -108,17 +145,7 @@ public class ExpressionProcessor {
         else if (e instanceof Modulo add) {
             float left = getEvalResults(add.getLeft());
             float right = getEvalResults(add.getRight());
-            result = left%right;
-        }
-        else if (e instanceof AtribuicaoOperacao add) {
-            result = getEvalResults(add.getOperacao());
-            if (valuesInt.containsKey(add.getId())) {
-                valuesInt.put(add.getId(), Math.round(result));
-            }
-            else {
-                valuesFloat.remove(add.getId());
-                valuesFloat.put(add.getId(), result);
-            }
+            result = left % right;
         }
         return result;
     }
@@ -128,155 +155,92 @@ public class ExpressionProcessor {
         if (e instanceof AtribuicaoInt atr) {
             if (valuesInt.containsKey(atr.getId())) {
                 valuesInt.remove(atr.getId());
-                result = "Int [" + atr.getId() + "] recebeu o valor " + atr.getValue();
+                result = "(integer) [" + atr.getId() + "] recebeu o valor " + atr.getValue();
                 valuesInt.put(atr.getId(), atr.getValue());
             }
             else {
-                result = "(linha " + atr.getLine() + ") - ERRO - " + getTipo(atr.getId()) +
-                        " [" + atr.getId() + "] nao pode receber o valor " + atr.getValue();
+                result = (char)27 + "[31m" +"(linha " + atr.getLine() + ") - ERRO - " + getTipo(atr.getId()) +
+                        " [" + atr.getId() + "] nao pode receber o valor " + atr.getValue() + (char)27 + "[00;00m";
             }
         }
         else if (e instanceof AtribuicaoFloat atr) {
             if (valuesFloat.containsKey(atr.getId())) {
                 valuesFloat.remove(atr.getId());
-                result = "Float [" + atr.getId() + "] recebeu o valor " + atr.getValue();
+                result = "(float)   [" + atr.getId() + "] recebeu o valor " + atr.getValue();
                 valuesFloat.put(atr.getId(), atr.getValue());
             }
             else {
-                result = "(linha " + atr.getLine() + ") - ERRO - " + getTipo(atr.getId()) +
-                        " [" + atr.getId() + "] nao pode receber o valor " + atr.getValue();
+                result = (char)27 + "[31m" + "(linha " + atr.getLine() + ") - ERRO - " + getTipo(atr.getId()) +
+                        " [" + atr.getId() + "] nao pode receber o valor " + atr.getValue() + (char)27 + "[00;00m";
             }
         }
         else if (e instanceof AtribuicaoString atr) {
             if (valuesString.containsKey(atr.getId())) {
                 valuesString.remove(atr.getId());
-                result = "String [" + atr.getId() + "] recebeu o valor " + atr.getValue();
+                result = "(string)  [" + atr.getId() + "] recebeu o valor " + atr.getValue();
                 valuesString.put(atr.getId(), atr.getValue());
             }
             else{
-                result = "(linha " + atr.getLine() + ") - ERRO - " + getTipo(atr.getId()) +
-                        " [" + atr.getId() + "] nao pode receber o valor " + atr.getValue();
+                result = (char)27 + "[31m" + "(linha " + atr.getLine() + ") - ERRO - " + getTipo(atr.getId()) +
+                        " [" + atr.getId() + "] nao pode receber o valor " + atr.getValue() + (char)27 + "[00;00m";
             }
         }
         else if (e instanceof AtribuicaoBool atr) {
             if (valuesBool.containsKey(atr.getId())) {
                 valuesBool.remove(atr.getId());
-                result = "Bool [" + atr.getId() + "] recebeu o valor " + atr.isValue();
+                result = "(bool)    [" + atr.getId() + "] recebeu o valor " + atr.isValue();
                 valuesBool.put(atr.getId(), atr.isValue());
             }
             else {
-                result =  "(linha " + atr.getLine() + ") - ERRO - " + getTipo(atr.getId()) + " [" + atr.getId() +
-                        "] nao pode receber o valor " + atr.isValue();
+                result = (char)27 + "[31m" + "(linha " + atr.getLine() + ") - ERRO - " + getTipo(atr.getId()) + " [" + atr.getId() +
+                        "] nao pode receber o valor " + atr.isValue() + (char)27 + "[00;00m";
             }
         }
         return result;
     }
 
-    private boolean getCompResults(Expression e) {
-        boolean result = false;
-        if (e instanceof Igual temp) {
-            float left;
-            float right;
-            if (valuesInt.containsKey(temp.getLeft())) {
-                left = valuesInt.get(temp.getLeft());
-            }
-            else {
-                left = valuesFloat.get(temp.getLeft());
-            }
-            if (valuesInt.containsKey(temp.getRight())) {
-                right = valuesInt.get(temp.getRight());
-            }
-            else {
-                right = valuesFloat.get(temp.getRight());
-            }
-            result = (left==right);
+    private boolean getCompResults(Comparacao e) throws Exception {
+        float left;
+        float right;
+        if (valuesInt.containsKey(e.getLeft())) {
+            left = valuesInt.get(e.getLeft());
         }
-        else if (e instanceof Diferente temp) {
-            float left;
-            float right;
-            if (valuesInt.containsKey(temp.getLeft())) {
-                left = valuesInt.get(temp.getLeft());
-            }
-            else {
-                left = valuesFloat.get(temp.getLeft());
-            }
-            if (valuesInt.containsKey(temp.getRight())) {
-                right = valuesInt.get(temp.getRight());
-            }
-            else {
-                right = valuesFloat.get(temp.getRight());
-            }
-            result = (left!=right);
+        else if (valuesFloat.containsKey(e.getLeft())) {
+            left = valuesInt.get(e.getLeft());
         }
-        else if (e instanceof MaiorQue temp) {
-            float left;
-            float right;
-            if (valuesInt.containsKey(temp.getLeft())) {
-                left = valuesInt.get(temp.getLeft());
-            }
-            else {
-                left = valuesFloat.get(temp.getLeft());
-            }
-            if (valuesInt.containsKey(temp.getRight())) {
-                right = valuesInt.get(temp.getRight());
-            }
-            else {
-                right = valuesFloat.get(temp.getRight());
-            }
-            result = (left>right);
+        else {
+            throw new Exception((char)27 + "[31m"+"(linha " + e.getLine() + ") - ERRO - Operação ilegal - " + e.getLeft()
+                    + " é do tipo " + getTipo(e.getLeft()) + (char)27 + "[00;00m");
         }
-        else if (e instanceof MenorQue temp) {
-            float left;
-            float right;
-            if (valuesInt.containsKey(temp.getLeft())) {
-                left = valuesInt.get(temp.getLeft());
-            }
-            else {
-                left = valuesFloat.get(temp.getLeft());
-            }
-            if (valuesInt.containsKey(temp.getRight())) {
-                right = valuesInt.get(temp.getRight());
-            }
-            else {
-                right = valuesFloat.get(temp.getRight());
-            }
-            result = (left<right);
+        if (valuesInt.containsKey(e.getRight())) {
+            right = valuesInt.get(e.getRight());
         }
-        else if (e instanceof MaiorIgual temp) {
-            float left;
-            float right;
-            if (valuesInt.containsKey(temp.getLeft())) {
-                left = valuesInt.get(temp.getLeft());
-            }
-            else {
-                left = valuesFloat.get(temp.getLeft());
-            }
-            if (valuesInt.containsKey(temp.getRight())) {
-                right = valuesInt.get(temp.getRight());
-            }
-            else {
-                right = valuesFloat.get(temp.getRight());
-            }
-            result = (left>=right);
+        else if (valuesFloat.containsKey(e.getRight())) {
+            right = valuesFloat.get(e.getRight());
         }
-        else if (e instanceof MenorIgual temp) {
-            float left;
-            float right;
-            if (valuesInt.containsKey(temp.getLeft())) {
-                left = valuesInt.get(temp.getLeft());
-            }
-            else {
-                left = valuesFloat.get(temp.getLeft());
-            }
-            if (valuesInt.containsKey(temp.getRight())) {
-                right = valuesInt.get(temp.getRight());
-            }
-            else {
-                right = valuesFloat.get(temp.getRight());
-            }
-            result = (left<=right);
+        else {
+            throw new Exception((char)27 + "[31m"+"(linha " + e.getLine() + ") - ERRO - Operação ilegal - " + e.getRight()
+                    + " é do tipo " + getTipo(e.getLeft())  + (char)27 + "[00;00m");
         }
-        return result;
+        if (e instanceof Igual) {
+            return (left==right);
+        }
+        else if (e instanceof Diferente) {
+            return (left!=right);
+        }
+        else if (e instanceof MaiorQue) {
+            return (left>right);
+        }
+        else if (e instanceof MenorQue) {
+            return (left<right);
+        }
+        else if (e instanceof MaiorIgual) {
+            return (left>=right);
+        }
+        else if (e instanceof MenorIgual) {
+            return (left<=right);
+        }
+        return false;
     }
 
     private String getTipo(String id) {

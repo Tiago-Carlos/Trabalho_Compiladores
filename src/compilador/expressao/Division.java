@@ -22,7 +22,8 @@ public class Division extends Expression {
         this.left = left;
     }
 
-    public Division(Expression left, Expression right) {
+    public Division(Expression left, Expression right, int line) {
+        super(line);
         this.left = left;
         this.right = right;
     }

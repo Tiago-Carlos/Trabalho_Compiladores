@@ -7,7 +7,8 @@ public class DeclarationString extends Expression {
     public String value;
 
 
-    public DeclarationString(String id, String value) {
+    public DeclarationString(String id, String value, int line) {
+        super(line);
         this.id = id;
         this.value = value;
     }

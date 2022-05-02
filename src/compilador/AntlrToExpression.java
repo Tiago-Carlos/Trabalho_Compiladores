@@ -38,7 +38,7 @@ public class AntlrToExpression extends parsBaseVisitor<Expression>{
             vars.add(id);
         }
         String type = ctx.getChild(0).getText();
-        return new DeclarationInt(id, type);
+        return new DeclarationInt(id, type, line);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class AntlrToExpression extends parsBaseVisitor<Expression>{
             vars.add(id);
         }
         String type = ctx.getChild(0).getText();
-        return new DeclarationFloat(id, type);
+        return new DeclarationFloat(id, type, line);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class AntlrToExpression extends parsBaseVisitor<Expression>{
             vars.add(id);
         }
         String type = ctx.getChild(0).getText();
-        return new DeclarationString(id, type);
+        return new DeclarationString(id, type, line);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class AntlrToExpression extends parsBaseVisitor<Expression>{
             vars.add(id);
         }
         String type = ctx.getChild(0).getText();
-        return new DeclarationBool(id, type);
+        return new DeclarationBool(id, type, line);
     }
 
     @Override
@@ -188,86 +188,101 @@ public class AntlrToExpression extends parsBaseVisitor<Expression>{
 
     @Override
     public Expression visitMaiorQue(parsParser.MaiorQueContext ctx) {
+        int line = ctx.getStart().getLine();
         String left = ctx.getChild(0).toString();
         String right = ctx.getChild(2).toString();
-        return new MaiorQue(left, right);
+        return new MaiorQue(left, right, line);
     }
 
     @Override
     public Expression visitMenorQue(parsParser.MenorQueContext ctx) {
+        int line = ctx.getStart().getLine();
         String left = ctx.getChild(0).toString();
         String right = ctx.getChild(2).toString();
-        return new MenorQue(left, right);
+        return new MenorQue(left, right, line);
     }
 
     @Override
     public Expression visitMaiorIgual(parsParser.MaiorIgualContext ctx) {
+        int line = ctx.getStart().getLine();
         String left = ctx.getChild(0).toString();
         String right = ctx.getChild(2).toString();
-        return new MaiorIgual(left, right);
+        return new MaiorIgual(left, right, line);
     }
 
     @Override
     public Expression visitMenorIgual(parsParser.MenorIgualContext ctx) {
+        int line = ctx.getStart().getLine();
         String left = ctx.getChild(0).toString();
         String right = ctx.getChild(2).toString();
-        return new MenorIgual(left, right);
+        return new MenorIgual(left, right, line);
     }
 
     @Override
     public Expression visitIgual(parsParser.IgualContext ctx) {
+        int line = ctx.getStart().getLine();
         String left = ctx.getChild(0).toString();
         String right = ctx.getChild(2).toString();
-        return new Igual(left, right);
+        return new Igual(left, right, line);
     }
 
     @Override
     public Expression visitDiferente(parsParser.DiferenteContext ctx) {
+        int line = ctx.getStart().getLine();
         String left = ctx.getChild(0).toString();
         String right = ctx.getChild(2).toString();
-        return new Diferente(left, right);
+        return new Diferente(left, right, line);
     }
 
     @Override
     public Expression visitAddition(parsParser.AdditionContext ctx) {
+        int line = ctx.getStart().getLine();
         Expression left = visit(ctx.getChild(0));
         Expression right = visit(ctx.getChild(2));
-        return new Addition(left, right);
+        if (left!=null && right!=null) {
+            return new Addition(left, right, line);
+        }
+        return null;
     }
 
     @Override
     public Expression visitMultiplication(parsParser.MultiplicationContext ctx) {
+        int line = ctx.getStart().getLine();
         Expression left = visit(ctx.getChild(0));
         Expression right = visit(ctx.getChild(2));
-        return new Multiplication(left, right);
+        return new Multiplication(left, right, line);
     }
 
     @Override
     public Expression visitSubtraction(parsParser.SubtractionContext ctx) {
+        int line = ctx.getStart().getLine();
         Expression left = visit(ctx.getChild(0));
         Expression right = visit(ctx.getChild(2));
-        return new Subtraction(left, right);
+        return new Subtraction(left, right, line);
     }
 
     @Override
     public Expression visitNumber(parsParser.NumberContext ctx) {
+        int line = ctx.getStart().getLine();
         String numText = ctx.getChild(0).getText();
         int num = Integer.parseInt(numText);
-        return new Number(num);
+        return new Number(num, line);
     }
 
     @Override
     public Expression visitModulo(parsParser.ModuloContext ctx) {
+        int line = ctx.getStart().getLine();
         Expression left = visit(ctx.getChild(0));
         Expression right = visit(ctx.getChild(2));
-        return new Modulo(left, right);
+        return new Modulo(left, right, line);
     }
 
     @Override
     public Expression visitDivision(parsParser.DivisionContext ctx) {
+        int line = ctx.getStart().getLine();
         Expression left = visit(ctx.getChild(0));
         Expression right = visit(ctx.getChild(2));
-        return new Division(left, right);
+        return new Division(left, right, line);
     }
 
     @Override
@@ -280,6 +295,6 @@ public class AntlrToExpression extends parsBaseVisitor<Expression>{
         if (!vars.contains(id)) {
             semanticErrors.add("Error: variavel " + id + " nao foi declarada! (" + line + ", " + column + ")");
         }
-        return new Variable(id);
+        return new Variable(id, line);
     }
 }

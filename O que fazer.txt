@@ -14,7 +14,8 @@ A linguagem ALGUMA produz códigos como o seguinte:
     ATRIBUIR "isso é uma string" A var3
     ATRIBUIR var1>var2 A var4
 
-Faça o analisador léxico e sintático utilizando a ferramenta ANTLR. Em seguida construa um programa na linguagem de sua preferência que use os analisadores léxico e sintáticos gerados e receba um código fonte salvo em arquivo de texto (.txt) na linguagem ALGUMA e que imprima:
+Faça o analisador léxico e sintático utilizando a ferramenta ANTLR. Em seguida construa um programa na linguagem de sua preferência que use os analisadores léxico
+e sintáticos gerados e receba um código fonte salvo em arquivo de texto (.txt) na linguagem ALGUMA e que imprima:
 - Ausência ou presença de erros léxicos (indicando quantidade e localização dos erros)
     - Tokens não identificados
 - Ausência ou presença de erros sintáticos (indicando quantidade e localização dos erros)
@@ -23,8 +24,11 @@ Faça o analisador léxico e sintático utilizando a ferramenta ANTLR. Em seguid
     - Erros no sentido do programa (bool * int) por exemplo
 Em relação aos erros semânticos, devem ser consideradas checagens de tipo e declarações (unicidade e existência ).
 
-Faça um relatório explicando cada etapa da implementação do programa (geração dos analisadores léxico e sintático no ANTLR, classes geradas, visão geral da implementação do programa, e explicação sobre como foi realizada cada análise)
+Faça um relatório explicando cada etapa da implementação do programa (geração dos analisadores léxico e sintático no ANTLR,
+ classes geradas, visão geral da implementação do programa, e explicação sobre como foi realizada cada análise)
 
-A atividade deve ser feita em equipe de até 4 pessoas. A equipe deve disponibilizar o link da implementação em repositório no Git Hub. O relatório deve ser gerado em PDF, contendo o link do repositório e identificação dos participantes da equipe. Todos os membros da equipe devem submeter o relatório no Campus Virtual. Estudantes que não submeterem o relatório ficarão com nota 0.
+A atividade deve ser feita em equipe de até 4 pessoas. A equipe deve disponibilizar o link da implementação em repositório no Git Hub.
+O relatório deve ser gerado em PDF, contendo o link do repositório e identificação dos participantes da equipe.
+Todos os membros da equipe devem submeter o relatório no Campus Virtual. Estudantes que não submeterem o relatório ficarão com nota 0.
 
 Data:  29/4 às 13h.

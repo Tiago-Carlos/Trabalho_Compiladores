@@ -8,7 +8,8 @@ public class DeclarationBool extends Expression {
     public Boolean value;
 
 
-    public DeclarationBool(String id, String type) {
+    public DeclarationBool(String id, String type, int line) {
+        super(line);
         this.id = id;
         this.type = type;
         this.value = false;

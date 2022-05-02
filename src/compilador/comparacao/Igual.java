@@ -2,34 +2,13 @@ package compilador.comparacao;
 
 import compilador.Expression;
 
-public class Igual extends Expression {
-    String left;
-
-    public String getLeft() {
-        return left;
-    }
-
-    public void setLeft(String left) {
-        this.left = left;
-    }
-
-    public String getRight() {
-        return right;
-    }
-
-    public void setRight(String right) {
-        this.right = right;
-    }
-
-    String right;
-
-    public Igual(String left, String right) {
-        this.left = left;
-        this.right = right;
+public class Igual extends Comparacao {
+    public Igual(String left, String right, int line) {
+        super(left, right, line);
     }
 
     @Override
     public String toString() {
-        return left + " == " + right;
+        return getLeft() + " == " + getRight();
     }
 }
