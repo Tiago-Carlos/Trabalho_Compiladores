@@ -9,6 +9,6 @@
     ATRIBUIR 2+var4 A var2
     ATRIBUIR  1,5 A var2
     ATRIBUIR var1+var2 A var1
-    ATRIBUIR "isso é uma string" A var3
-    ATRIBUIR var1>5 A var4
-    ATRIBUIR 5>5 A var4
+    ATRIBUIR var1 + "isso é uma string" A var3
+    ATRIBUIR "isso que é string" A var3
+    ATRIBUIR var1>var3 A var4

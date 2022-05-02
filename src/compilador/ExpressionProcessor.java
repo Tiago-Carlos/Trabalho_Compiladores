@@ -166,6 +166,7 @@ public class ExpressionProcessor {
         else if (e instanceof AtribuicaoFloat atr) {
             if (valuesFloat.containsKey(atr.getId())) {
                 valuesFloat.remove(atr.getId());
+                valuesFloat.remove(atr.getId());
                 result = "(float)   [" + atr.getId() + "] recebeu o valor " + atr.getValue();
                 valuesFloat.put(atr.getId(), atr.getValue());
             }
@@ -220,7 +221,7 @@ public class ExpressionProcessor {
         }
         else {
             throw new Exception((char)27 + "[31m"+"(linha " + e.getLine() + ") - ERRO - Operação ilegal - " + e.getRight()
-                    + " é do tipo " + getTipo(e.getLeft())  + (char)27 + "[00;00m");
+                    + " é do tipo " + getTipo(e.getRight())  + (char)27 + "[00;00m");
         }
         if (e instanceof Igual) {
             return (left==right);
